@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -19,8 +20,10 @@ def create(request):
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     serializer.save()
+    user = serializer.instance
+    token = user.get_access_token
 
-    response = {'message': 'Done', 'user': serializer.data}
+    response = {'message': 'Done', 'user': serializer.data, **token}
     return Response(response, status=status.HTTP_201_CREATED)
 
 
@@ -51,4 +54,21 @@ def delete(request):
     request.user.delete()
 
     response = {'message': 'Done'}
+    return Response(response, status=status.HTTP_200_OK)
+
+
+def login_user(request):
+    """Log in a user"""
+    email = request.data.get('email', None)
+    password = request.data.get('password', None)
+
+    user = authenticate(email=email, password=password)
+    if not user:
+        response = {'message': 'Invalid credentials'}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    token = user.get_access_token
+    serializer = UserSerializer(user)
+
+    response = {'message': 'Done', 'user': serializer.data, **token}
     return Response(response, status=status.HTTP_200_OK)

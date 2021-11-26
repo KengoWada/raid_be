@@ -35,7 +35,9 @@ class BaseTestCase(APITestCase):
         }
 
     def create_user(self, data):
-        email = data.pop('email')
-        password = data.pop('password')
+        user_data = data.copy()
 
-        return User.objects.create_user(email, password, **data)
+        email = user_data.pop('email')
+        password = user_data.pop('password')
+
+        return User.objects.create_user(email, password, **user_data)

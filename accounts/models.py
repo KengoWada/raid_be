@@ -32,6 +32,6 @@ class User(AbstractUser):
         return self
 
     @property
-    def get_access_tokens(self):
+    def get_access_token(self):
         token = RefreshToken.for_user(self)
-        return {'access': str(token.access_token), 'refresh': str(token)}
+        return {'access': str(token.access_token)}
