@@ -9,4 +9,4 @@ class XrayUploadSerializer(serializers.ModelSerializer):
         model = XrayUpload
         fields = ('id', 'uuid', 'description', 'images')
 
-    user = serializers.ReadOnlyField()
+        user = serializers.ReadOnlyField()

@@ -27,7 +27,8 @@ def create(request):
 
 def get(request):
     """Get all a users z-ray uploads"""
-    uploads = XrayUpload.objects.filter(user__id=request.user.id)
+    uploads = XrayUpload.objects.filter(
+        user__id=request.user.id).order_by('-updated_at')
 
     paginator = XrayUploadPagination()
     results = paginator.paginate_queryset(uploads, request=request)
