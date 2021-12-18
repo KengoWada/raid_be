@@ -1,12 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+
+User = get_user_model()
 
 
 class XrayUpload(models.Model):
     uuid = models.CharField(max_length=128, unique=True)
     description = models.TextField(null=False, blank=False)
     images = ArrayField(models.URLField())
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
