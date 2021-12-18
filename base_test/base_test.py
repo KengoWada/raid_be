@@ -52,6 +52,9 @@ class BaseTestCase(APITestCase):
             'description': 'Patient ID: 123456, Case Number: 123456',
             'images': []
         }
+        self.update_xray_upload = {
+            'description': 'Patient ID: 654, Case Number: 321'
+        }
 
     def create_user(self, data):
         user_data = data.copy()

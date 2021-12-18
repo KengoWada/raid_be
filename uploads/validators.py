@@ -33,3 +33,17 @@ def validate_create_xray_upload(data):
         return v.errors
 
     return None
+
+
+def validate_update_xray_upload(data):
+    schema = {
+        'description': {'type': 'string', 'required': True}
+    }
+
+    v = Validator(schema)
+    v.validate(data)
+
+    if v.errors:
+        return v.errors
+
+    return None

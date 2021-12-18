@@ -57,3 +57,96 @@ FETCH_UPLOADS_RESPONSE = {
         }
     ),
 }
+
+FETCH_UPLOAD_RESPONSE = {
+    '200': openapi.Response(
+        description='User has successfully fetched their xray upload',
+        examples={
+            'application/json': {
+                'message': 'Done',
+                'upload': {
+                    'id': 0,
+                    'uuid': 'string',
+                    'description': 'string',
+                    'images': ['url']
+                }
+            }
+        }
+    ),
+    '401': openapi.Response(
+        description='User is not authenticated',
+        examples={
+            'application/json': {
+                'detail': 'Authentication credentials were not provided.'
+            }
+        }
+    ),
+    '403': openapi.Response(
+        description='User does not have permission',
+        examples={
+            'application/json': {
+                'message': 'Invalid permissions'
+            }
+        }
+    ),
+}
+
+UPDATE_UPLOAD_RESPONSE = {
+    '200': openapi.Response(
+        description='User has successfully updated their xray upload',
+        examples={
+            'application/json': {
+                'message': 'Done',
+                'upload': {
+                    'id': 0,
+                    'uuid': 'string',
+                    'description': 'string',
+                    'images': ['url']
+                }
+            }
+        }
+    ),
+    '401': openapi.Response(
+        description='User is not authenticated',
+        examples={
+            'application/json': {
+                'detail': 'Authentication credentials were not provided.'
+            }
+        }
+    ),
+    '403': openapi.Response(
+        description='User does not have permission',
+        examples={
+            'application/json': {
+                'message': 'Invalid permissions'
+            }
+        }
+    ),
+}
+
+DELETE_UPLOAD_RESPONSE = {
+    '200': openapi.Response(
+        description='User has successfully deleted the xray uploads',
+        examples={
+            'application/json': {
+                'message': 'Done'
+            }
+        }
+    ),
+    '401': openapi.Response(
+        description='User is not authenticated',
+        examples={
+            'application/json': {
+                'detail': 'Authentication credentials were not provided.'
+            }
+        }
+    ),
+    '403': openapi.Response(
+        description='User does not have permission',
+        examples={
+            'application/json': {
+                'message': 'Invalid permissions'
+            }
+        }
+    ),
+}
