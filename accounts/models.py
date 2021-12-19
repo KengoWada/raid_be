@@ -9,6 +9,7 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField(unique=True)
+    avatar = models.URLField(default='', blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -25,7 +26,7 @@ class User(AbstractUser):
         return self.email
 
     def update(self, data):
-        for field in ['first_name', 'last_name']:
+        for field in ['first_name', 'last_name', 'avatar']:
             if field in data:
                 setattr(self, field, data[field])
         self.save()

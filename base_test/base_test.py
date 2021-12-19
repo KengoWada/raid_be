@@ -15,23 +15,26 @@ class BaseTestCase(APITestCase):
             'email': 'test.user@email.com',
             'first_name': 'Test',
             'last_name': 'User',
+            'avatar': 'https://somelink.com/img.png',
             'password': 'Compl3xpassword'
         }
         self.other_user_data = {
             'email': 'other.user@email.com',
             'first_name': 'Other',
             'last_name': 'User',
+            'avatar': 'https://somelink.com/img2.png',
             'password': 'Compl3xpassword'
         }
         self.invalid_user_data = {
-            'email': 'other.user@ema',
+            'email': 'other.user@email.com',
             'first_name': 'Other',
             'last_name': 'User',
             'password': 'Compl3xpassword'
         }
         self.update_user_data = {
             'first_name': 'Updated',
-            'last_name': 'Name'
+            'last_name': 'Name',
+            'avatar': 'https://somelink.com/img3.png',
         }
         self.invalid_update_user_data = {
             'last_name': 'Name'

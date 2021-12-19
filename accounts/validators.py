@@ -1,6 +1,8 @@
 import re
 
 from cerberus import Validator
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 
 
 class CustomValidator(Validator):
@@ -29,12 +31,26 @@ class CustomValidator(Validator):
         if is_password and result == None:
             self._error(field, 'Invalid password')
 
+    def _validate_is_url(self, is_url, field, value):
+        """Test if a value is a valid url.
+        The rule's arguments are validated against this schema:
+        {'type': 'boolean'}
+        """
+        if is_url:
+            validate_url = URLValidator()
+
+            try:
+                validate_url(value)
+            except ValidationError:
+                self._error(field, 'Invalid url')
+
 
 def validate_register_user(data):
     schema = {
         'email': {'type': 'string', 'is_email': True, 'required': True},
         'first_name': {'type': 'string', 'required': True},
         'last_name': {'type': 'string', 'required': True},
+        'avatar': {'type': 'string', 'is_url': True, 'required': True},
         'password': {'type': 'string', 'is_password': True, 'required': True},
     }
 
@@ -49,10 +65,11 @@ def validate_register_user(data):
 def validate_update_user_details(data):
     schema = {
         'first_name': {'type': 'string', 'required': True},
-        'last_name': {'type': 'string', 'required': True}
+        'last_name': {'type': 'string', 'required': True},
+        'avatar': {'type': 'string', 'is_url': True, 'required': True},
     }
 
-    v = Validator(schema)
+    v = CustomValidator(schema)
     v.validate(data)
     if v.errors:
         return v.errors
