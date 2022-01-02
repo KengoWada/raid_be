@@ -72,3 +72,21 @@ class FetchUpdateDeleteXrayUploadsAPIView(APIView):
     def delete(self, request, upload_id):
         upload = self.get_object(upload_id)
         return uploads_crud.delete(upload)
+
+
+class FetchXrayUploadResultsAPIView(APIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def get_object(self, pk):
+        try:
+            xray_upload = XrayUpload.objects.get(pk=pk)
+            self.check_object_permissions(self.request, xray_upload)
+            return xray_upload
+        except XrayUpload.DoesNotExist:
+            return None
+
+    def get(self, pk):
+        upload = self.get_object(pk)
+        return uploads_crud.get_results(upload)

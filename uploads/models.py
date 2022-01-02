@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -20,4 +22,18 @@ class XrayUpload(models.Model):
 
 
 class UploadResult(models.Model):
-    pass
+    xray_upload = models.ForeignKey(XrayUpload, on_delete=models.CASCADE)
+    image = models.URLField(blank=True)
+    results = models.TextField()
+    result_image = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'xray_uploads_results'
+        verbose_name = 'X-Ray Uploads Results'
+        verbose_name_plural = 'X-Ray Uploads Results'
+
+    @property
+    def uploadResults(self):
+        return json.loads(self.results)

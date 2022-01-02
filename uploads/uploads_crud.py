@@ -1,10 +1,10 @@
-from unittest import result
 from rest_framework import status
 from rest_framework.response import Response
 
-from .models import XrayUpload
+from .models import UploadResult, XrayUpload
 from .paginators import XrayUploadPagination
-from .serializers import XrayUploadSerializer
+from .serializers import UploadResultSerializer, XrayUploadSerializer
+from .tasks import get_xray_upload_results
 from .validators import (validate_create_xray_upload,
                          validate_update_xray_upload)
 
@@ -22,13 +22,14 @@ def create(request):
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     serializer.save(user=request.user)
+    get_xray_upload_results.delay(serializer.data['id'])
 
     response = {'message': 'Done', 'upload': serializer.data}
     return Response(response, status=status.HTTP_201_CREATED)
 
 
 def get(request):
-    """Get all a users z-ray uploads"""
+    """Get all a users x-ray uploads"""
     uploads = XrayUpload.objects.filter(
         user__id=request.user.id).order_by('-updated_at')
 
@@ -88,4 +89,21 @@ def delete(upload):
     upload.delete()
 
     response = {'message': 'Done'}
+    return Response(response, status=status.HTTP_200_OK)
+
+
+def get_results(xray_upload):
+    if response := is_upload(xray_upload):
+        return response
+
+    xray_serializer = XrayUploadSerializer(xray_upload)
+
+    results = UploadResult.objects.filter(xray_upload__id=xray_upload.id)
+    results_serializer = UploadResultSerializer(results, many=True)
+
+    response = {
+        'messaage': 'Done',
+        'xray_upload': xray_serializer.data,
+        'results': results_serializer.data
+    }
     return Response(response, status=status.HTTP_200_OK)

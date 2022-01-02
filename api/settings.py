@@ -206,3 +206,11 @@ SWAGGER_SETTINGS = {
     }
 
 }
+
+
+# Celery config
+# https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html#django-first-steps
+CELERY_BROKER_URL = config('REDIS_URL')
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
