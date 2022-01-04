@@ -20,14 +20,14 @@ def get_xray_upload_results(pk):
         return
 
     data = {'images': xray_upload.images}
-    headers = {'content-type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
 
-    response = requests.post(AI_MODEL_API, data=data, headers=headers)
-    response = response.json()
-    for i in response:
+    response = requests.post(AI_MODEL_API, json=data, headers=headers)
+    results = response.json()
+    for i in results:
         i['results'] = json.dumps(i['results'])
 
-    serializer = CreateUploadResultSerializer(data=response, many=True)
+    serializer = CreateUploadResultSerializer(data=results, many=True)
     if not serializer.is_valid():
         return
 

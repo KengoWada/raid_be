@@ -87,6 +87,11 @@ class FetchXrayUploadResultsAPIView(APIView):
         except XrayUpload.DoesNotExist:
             return None
 
-    def get(self, pk):
-        upload = self.get_object(pk)
+    @swagger_auto_schema(
+        responses=responses.FETCH_UPLOADS_RESULTS_RESPONSE,
+        operation_id='Fetch xray upload',
+        operation_description='Fetch xray upload',
+    )
+    def get(self, request, upload_id):
+        upload = self.get_object(upload_id)
         return uploads_crud.get_results(upload)

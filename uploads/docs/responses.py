@@ -150,3 +150,32 @@ DELETE_UPLOAD_RESPONSE = {
         }
     ),
 }
+
+FETCH_UPLOADS_RESULTS_RESPONSE = {
+    '200': openapi.Response(
+        description='User has successfully deleted the xray uploads',
+        examples={
+            'application/json': {
+                'message': 'Done',
+                'xray_upload': {},
+                'results': []
+            }
+        }
+    ),
+    '401': openapi.Response(
+        description='User is not authenticated',
+        examples={
+            'application/json': {
+                'detail': 'Authentication credentials were not provided.'
+            }
+        }
+    ),
+    '403': openapi.Response(
+        description='User does not have permission',
+        examples={
+            'application/json': {
+                'message': 'Invalid permissions'
+            }
+        }
+    ),
+}
