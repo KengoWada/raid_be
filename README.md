@@ -18,22 +18,52 @@
 
 ## Deploying To Compute Engine
 
-- Clone the repo
+- Start by running the `start.sh` script to install some dependencies and clone the repo
 
-- Install the needed dependencies `apt-get install redis-server postgresql nginx postgresql-contrib libpcap-dev libpq-dev`
+- Switch to the backend directory `cd raid_be`
 
-- Configure PostgreSQL, Redis and Nginx accordingly
+- Create a virtual environment `python3 -m venv venv` and activate it `. venv/bin/activate`
 
-- Create a virtual environment `python3 -m venv venv`
+- Install dependencies `pip install -r requirements.txt`
 
-- Activate the virtual environment `. venv/bin/activate`
+- Create a `.env` file and add the required environment variables from `.env_example`
 
-- Install all dependencies `pip install -r requirements.txt`
+  - `touch .env`
 
-- Create a `.env` file and add the variables from `.env_example`
+  - `cp .env_example .env`
 
-- Make databse migrations `python manage.py migrate`
+  - `nano .env` to edit the values
 
-- Create `static` and `media` directories then run `python manage.py collectstatic`
+  - `source .env` to add them to the session
 
-- Start the server `gunicorn api.wsgi -b 0.0.0.0:8080 --timeout 900 --log-level debug --log-file -`
+- Make database migrations `python manage.py migrate`
+
+- Create static files `python manage.py collectstatic`
+
+- To run the server:
+
+  - **THIS MUST BE DONE IN 2 DIFFERENT TERMINAL SESSIONS WITH THE SAME SUDO USER**
+
+  - For Django App:
+
+    - Create a new terminal session and login as `raid` with `su - raid`
+
+    - Switch to the backend directory `cd raid_be`
+
+    - Activate the virtual environment `. venv/bin/activate`
+
+    - Source environment variables `source .env`
+
+    - Run server `gunicorn api.wsgi -b 0.0.0.0:8080 --timeout 900 --log-level debug --log-file -`
+
+  - For Start Celery service:
+
+    - Create a new terminal session and login as `raid` with `su - raid`
+
+    - Switch to the backend directory `cd raid_be`
+
+    - Activate the virtual environment `. venv/bin/activate`
+
+    - Source environment variables `source .env`
+
+    - Start celery `celery -A api worker -l info`
